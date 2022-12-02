@@ -16,7 +16,6 @@ final class TutPushTests: XCTestCase {
     
     func testHelloWorld() throws {
         try app.test(.POST, "tanaka/vapor") { req in
-            print(TEST_PUSH_JSON)
             req.body = ByteBuffer(string: TEST_PUSH_JSON)
         } afterResponse: { res in
             XCTAssertEqual(res.status, .created)
