@@ -20,5 +20,5 @@ jobs:
           script: |
             cd ${{ secrets.PROJECT_DIRECTORY_PATH }}
             git pull origin main
-            swift build -c release && ./.build/release/Run migrate
+            swift build -c release && ./.build/release/Run migrate -y
             supervisorctl restart tuthub
