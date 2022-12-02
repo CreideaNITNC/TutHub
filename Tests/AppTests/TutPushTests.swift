@@ -23,6 +23,6 @@ final class TutPushTests: XCTestCase {
     }
     
     func testCI() throws {
-        XCTAssertEqual("Hello", "Hello")
+        XCTAssertEqual("Hello", "World")
     }
 }
