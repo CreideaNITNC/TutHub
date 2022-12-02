@@ -1,0 +1,33 @@
+name: Vapor Test
+on: pull_request
+
+jobs:
+  build:
+    name: TutHubTest
+    runs-on: ubuntu-22.04
+    services:
+      postgres:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: vapor_username
+          POSTGRES_PASSWORD: vapor_password
+          POSTGRES_DB: vapor_database
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    container:
+      image: swift:5.7.1
+      env:
+        DATABASE_HOST: postgres
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: swift package update
+        run: swift package resolve
+
+      - name: migrate
+        run: swift run migrate
+
+      - name: swift test
+        run: swift test
