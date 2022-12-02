@@ -1,6 +1,6 @@
 import Fluent
 import FluentPostgresDriver
-//import Leaf
+import Leaf
 import Vapor
 
 // configures your application
@@ -18,7 +18,7 @@ public func configure(_ app: Application) throws {
 
     app.migrations.add(CreateTodo())
 
-//    app.views.use(.leaf)
+    app.views.use(.leaf)
 
     
 
