@@ -21,8 +21,4 @@ final class TutPushTests: XCTestCase {
             XCTAssertEqual(res.status, .created)
         }
     }
-    
-    func testCI() throws {
-        XCTAssertEqual("Hello", "World")
-    }
 }
