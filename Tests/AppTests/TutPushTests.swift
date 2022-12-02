@@ -14,7 +14,7 @@ final class TutPushTests: XCTestCase {
         app.shutdown()
     }
     
-    func testHelloWorld() throws {
+    func testPush時にCreatedを返却する() throws {
         try app.test(.POST, "tanaka/vapor") { req in
             req.body = ByteBuffer(string: TEST_PUSH_JSON)
         } afterResponse: { res in
