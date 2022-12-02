@@ -6,7 +6,7 @@ jobs:
     name: TutHubTest
     runs-on: ubuntu-22.04
     services:
-      postgres:
+      db:
         image: postgres:14
         ports:
           - 5432:5432
@@ -17,17 +17,18 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     container:
       image: swift:5.7.1
-      env:
-        DATABASE_HOST: postgres
     steps:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: swift package update
+      - name: swift package resolve
         run: swift package resolve
 
+      - name: swift build
+        run: swift build
+
       - name: migrate
-        run: swift run migrate
+        run: ./.build/debug/Run migrate -y
 
       - name: swift test
         run: swift test
