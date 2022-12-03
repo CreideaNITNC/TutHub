@@ -31,4 +31,4 @@ jobs:
         run: ./.build/debug/Run migrate -y
 
       - name: swift test
-        run: swift test --parallel
+        run: swift test
