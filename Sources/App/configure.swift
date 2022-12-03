@@ -21,7 +21,9 @@ public func configure(_ app: Application) throws {
     app.views.use(.leaf)
 
     
-
+    app.middleware.use(app.sessions.middleware)
+    app.middleware.use(UserSessionAuthenticator())
+    
     // register routes
     try routes(app)
 }
