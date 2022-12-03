@@ -15,12 +15,14 @@ public func configure(_ app: Application) throws {
         password: Environment.get("DATABASE_PASSWORD") ?? "vapor_password",
         database: Environment.get("DATABASE_NAME") ?? "vapor_database"
     ), as: .psql)
-
+    
     app.migrations.add(UserModel.Migration())
+    app.seeders.add(UserModel.Seeder())
+    
     app.migrations.add(SignUserModel.Migration())
+    app.seeders.add(try SignUserModel.Seeder(hasher: app.password, userModelSeeder: app.seeders.of(UserModel.Seeder.self)))
     
     app.views.use(.leaf)
-
     
     app.middleware.use(app.sessions.middleware)
     app.middleware.use(UserSessionAuthenticator())

@@ -1,5 +1,5 @@
 import Vapor
 
-struct User {
+struct User: Equatable, Hashable, Identifiable {
     var id: UUID
 }

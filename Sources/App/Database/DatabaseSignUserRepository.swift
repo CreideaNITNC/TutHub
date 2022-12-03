@@ -5,21 +5,21 @@ struct DatabaseSignUserRepository: SignUserRepository {
     
     var db: Database
     
-    var password: Request.Password
+    var password: AsyncPasswordHasher
     
-    func isVerify(_ user: SignUserContent) async throws -> User? {
+    func verify(_ user: SignUserContent) async throws -> User? {
         guard
             let candidate = try await findSignUserModel(user.mailAddress),
-            try await password.async.verify(user.password, created: candidate.passwordHash)
+            try await password.verify(user.password, created: candidate.passwordHash)
         else {
             return nil
         }
-        
+        try await candidate.$userModel.load(on: db)
         return candidate.userModel.user
     }
     
     func signUp(_ user: SignUserContent) async throws -> User {
-        guard try await isAlreadyExistMailAddress(user.mailAddress) else {
+        if try await isAlreadyExistMailAddress(user.mailAddress) {
             throw Abort(.badRequest, reason: "the mail address is already registered")
         }
         
@@ -44,7 +44,7 @@ struct DatabaseSignUserRepository: SignUserRepository {
         
         let signUserModel = SignUserModel(
             mailAddress: user.mailAddress,
-            passwordHash: try await password.async.hash(user.password),
+            passwordHash: try await password.hash(user.password),
             userModelID: try userModel.requireID()
         )
         try await userModel.$signUserModel.create(signUserModel, on: db)
