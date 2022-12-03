@@ -11,10 +11,10 @@
 
 <form action="/sign/in" method="post">
   <label>
-    <p><input type="text" name="mailAddress"></p>
+    <p><input type="text" placeholder="メールアドレス" name="mailAddress"></p>
   </label>
   <label>
-    <p><input type="password" name="password"></p>
+    <p><input type="password" placeholder="パスワード" name="password"></p>
   </label>
   <p><input type="submit" vaue="Sign In"></p>
 </form>
@@ -25,10 +25,10 @@
 
 <form action="/sign/up" method="post">
   <label>
-    <p><input type="text" name="mailAddress"></p>
+    <p><input type="text" placeholder="メールアドレス" name="mailAddress"></p>
   </label>
   <label>
-    <p><input type="password" name="password"></p>
+    <p><input type="password" placeholder="パスワード" name="password"></p>
   </label>
   <p><input type="submit" vaue="Sign Up"></p>
 </form>
