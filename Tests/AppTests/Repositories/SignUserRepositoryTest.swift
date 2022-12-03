@@ -66,5 +66,4 @@ final class SignUserRepositoryTest: XCTestCase {
         XCTAssertEqual(signUpUser, signInUser)
     }
     
-    
 }
