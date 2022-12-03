@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign</title>
+</head>
+<body>
+
+<form action="/sign/in" method="post">
+  <label>
+    <p><input type="text" name="mailAddress"></p>
+  </label>
+  <label>
+    <p><input type="password" name="password"></p>
+  </label>
+  <p><input type="submit" vaue="Sign In"></p>
+</form>
+
+#if(isFailed):
+<p>メールアドレス、またはパスワードが違います。</p>
+#endif
+
+<form action="/sign/up" method="post">
+  <label>
+    <p><input type="text" name="mailAddress"></p>
+  </label>
+  <label>
+    <p><input type="password" name="password"></p>
+  </label>
+  <p><input type="submit" vaue="Sign Up"></p>
+</form>
+
+#if(isAlreadyRegistered):
+<p>そのメールアドレスはすでに登録されています。</p>
+#endif
+
+
+</body>
+</html>

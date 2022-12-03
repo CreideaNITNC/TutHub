@@ -6,5 +6,9 @@ func routes(_ app: Application) throws {
         HTTPStatus.created
     }
     
-    try app.register(collection: RepositoryController())
+    app.get { req async throws -> View in
+        try await req.signViewRender.render(isFailed: false, isAlreadyRegistered: false)
+    }
+    
+    try app.register(collection: SignController())
 }
