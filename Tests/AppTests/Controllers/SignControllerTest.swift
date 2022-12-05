@@ -6,7 +6,6 @@ final class SignControllerTest: XCTestCase {
     var app: Application = Application(.testing)
     
     override func setUp() async throws {
-        
         app = Application(.testing)
         try configure(app)
         try await app.seedersSeed()
