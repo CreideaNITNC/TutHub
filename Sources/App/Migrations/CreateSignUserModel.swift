@@ -9,7 +9,7 @@ extension SignUserModel {
                 .id()
                 .field(sample.$mailAddress.key, .string, .required)
                 .field(sample.$passwordHash.key, .string, .required)
-                .field(sample.$userModel.$id.key, .uuid, .required, .references(UserModel.schema, UserModel().$id.key))
+                .field(sample.$userModel.$id.key, .uuid, .required, .references(UserModel.schema, UserModel().$id.key, onDelete: .cascade))
                 .unique(on: sample.$mailAddress.key)
                 .create()
         }

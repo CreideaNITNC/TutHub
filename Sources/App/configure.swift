@@ -22,6 +22,12 @@ public func configure(_ app: Application) throws {
     app.migrations.add(SignUserModel.Migration())
     app.seeders.add(try SignUserModel.Seeder(hasher: app.password, userModelSeeder: app.seeders.of(UserModel.Seeder.self)))
     
+    app.migrations.add(TutHubRepositoryModel.Migration())
+    app.migrations.add(TagModel.Migration())
+    app.migrations.add(CommitModel.Migration())
+    app.migrations.add(SourceCodeModel.Migration())
+    app.migrations.add(PictureModel.Migration())
+    
     app.views.use(.leaf)
     
     app.middleware.use(app.sessions.middleware)

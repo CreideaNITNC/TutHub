@@ -11,6 +11,9 @@ final class UserModel: Model {
     @OptionalChild(for: \.$userModel)
     var signUserModel: SignUserModel?
     
+    @Children(for: \.$user)
+    var repositories: [TutHubRepositoryModel]
+    
     init() { }
     
     init(id: UUID? = nil) {

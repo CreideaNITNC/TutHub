@@ -40,13 +40,14 @@ struct DatabaseSignUserRepository: SignUserRepository {
     
     private func createUserModelAndSignUserModel(by user: SignUserContent) async throws -> UserModel {
         let userModel = UserModel()
+        let passwordHash = try await password.hash(user.password)
         
         try await db.transaction { transaction in
             try await userModel.create(on: transaction)
             
             let signUserModel = SignUserModel(
                 mailAddress: user.mailAddress,
-                passwordHash: try await password.hash(user.password),
+                passwordHash: passwordHash,
                 userModelID: try userModel.requireID()
             )
             try await userModel.$signUserModel.create(signUserModel, on: transaction)
