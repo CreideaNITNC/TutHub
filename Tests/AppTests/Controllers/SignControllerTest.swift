@@ -6,7 +6,6 @@ final class SignControllerTest: XCTestCase {
     var app: Application = Application(.testing)
     
     override func setUp() async throws {
-        
         app = Application(.testing)
         try configure(app)
         try await app.seedersSeed()
@@ -25,7 +24,7 @@ final class SignControllerTest: XCTestCase {
             ])
         } afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
-            XCTAssertContains(res.body.string, "TutHub Home")
+            XCTAssertContains(res.body.string, "リポジトリ一覧")
         }
     }
     
@@ -49,7 +48,7 @@ final class SignControllerTest: XCTestCase {
             ])
         } afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
-            XCTAssertContains(res.body.string, "TutHub Home")
+            XCTAssertContains(res.body.string, "リポジトリ一覧")
             
             try app.test(.POST, "sign/in") { req in
                 try req.content.encode([
@@ -58,7 +57,7 @@ final class SignControllerTest: XCTestCase {
                 ])
             } afterResponse: { res in
                 XCTAssertEqual(res.status, .ok)
-                XCTAssertContains(res.body.string, "TutHub Home")
+                XCTAssertContains(res.body.string, "リポジトリ一覧")
             }
         }
     }

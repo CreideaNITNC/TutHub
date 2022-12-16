@@ -11,4 +11,7 @@ func routes(_ app: Application) throws {
     }
     
     try app.register(collection: SignController())
+    try app.register(collection: RepositoryController())
+    try app.register(collection: TutController())
+    try app.register(collection: TutHubPageController())
 }
