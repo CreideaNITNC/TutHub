@@ -46,6 +46,9 @@ struct DatabaseTutorialPageRepository: TutorialPageDataRepository {
                 commit.with(\.$codes)
                 commit.with(\.$pictures)
             }
+            .join(CommitModel.self, on: \TagModel.$id == \CommitModel.$tag.$id)
+            .sort(\.$number)
+            .sort(CommitModel.self, \.$step)
             .first()
     }
 }

@@ -9,11 +9,9 @@ struct TutController: RouteCollection {
     }
     
     func push(req: Request) async throws -> HTTPStatus {
-        print(req.body)
         let userID = req.parameters.get("userID", as: UUID.self)!
         let repositoryName = req.parameters.get("repository")!
-        
-        var data = try JSONDecoder().decode(PushData.self, from: ByteBuffer(string: req.body.string!))
+        let data = try req.content.decode(PushData.self)
         
         try await req.tutPushRepository.push(userID: userID, repositoryName: repositoryName, data: data)
         return .created

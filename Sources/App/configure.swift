@@ -5,8 +5,8 @@ import Vapor
 
 // configures your application
 public func configure(_ app: Application) throws {
-    // uncomment to serve files from /Public folder
-    // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+//     uncomment to serve files from /Public folder
+     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
     app.databases.use(.postgres(
         hostname: Environment.get("DATABASE_HOST") ?? "db",
@@ -35,6 +35,17 @@ public func configure(_ app: Application) throws {
     
     let timeout = HTTPClient.Configuration.Timeout(connect: .seconds(60), read: .seconds(60))
     app.http.client.configuration.timeout = timeout
+    
+    let corsConfiguration = CORSMiddleware.Configuration(
+        allowedOrigin: .custom(Environment.get("TUTPAGE_ORIGIN") ?? "http://localhost:5173"),
+        allowedMethods: [.GET],
+        allowedHeaders: [.accept, .authorization, .contentType, .origin, .xRequestedWith, .userAgent, .accessControlAllowOrigin]
+    )
+    let cors = CORSMiddleware(configuration: corsConfiguration)
+    // cors middleware should come before default error middleware using `at: .beginning`
+    app.middleware.use(cors, at: .beginning)
+    
+    app.routes.defaultMaxBodySize = "500mb"
     
     // register routes
     try routes(app)
