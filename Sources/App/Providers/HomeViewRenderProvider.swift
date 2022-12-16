@@ -5,6 +5,6 @@ extension Request {
         guard let user = auth.get(User.self) else {
             fatalError("used HomeViewRender, but user didn't login")
         }
-        return HomeViewRender(renderer: view, user: user)
+        return HomeViewRender(renderer: view, user: user, db: db)
     }
 }

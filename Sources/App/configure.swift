@@ -33,6 +33,9 @@ public func configure(_ app: Application) throws {
     app.middleware.use(app.sessions.middleware)
     app.middleware.use(UserSessionAuthenticator())
     
+    let timeout = HTTPClient.Configuration.Timeout(connect: .seconds(60), read: .seconds(60))
+    app.http.client.configuration.timeout = timeout
+    
     // register routes
     try routes(app)
 }

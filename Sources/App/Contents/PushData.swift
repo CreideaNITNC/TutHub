@@ -2,7 +2,7 @@ import Vapor
 
 struct PushData: Content {
     
-    var tags: [Tag]
+    var tags: [Self.Tag]
     
     struct Tag: Content {
         var id: UUID

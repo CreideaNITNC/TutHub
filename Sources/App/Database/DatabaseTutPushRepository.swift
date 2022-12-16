@@ -16,76 +16,43 @@ struct DatabaseTutPushRepository: TutPushRepository {
             let tags: [TagModel] = try data.tags.enumerated().map { (index, tag) in
                     .init(name: tag.name, number: index + 1, repositoryID: try repository.requireID())
             }
-            try await repository.$tags.create(tags, on: transaction)
+            try await tags.create(on: transaction)
             
-            await withThrowingTaskGroup(of: Void.self, returning: Void.self) { tagGroup in
-                for i in 0 ..< tags.count {
-                    tagGroup.addTask {
-                        let tagModel = tags[i]
-                        let commits: [CommitModel] = try data.tags[i].commits.enumerated().map { (index, commit) in
-                                .init(step: index + 1, message: commit.message, tagID: try tagModel.requireID())
-                        }
-                        try await tagModel.$commits.create(commits, on: transaction)
-                        
-                        await withThrowingTaskGroup(of: Void.self) { commitGroup in
-                            for j in 0 ..< commits.count {
-                                commitGroup.addTask {
-                                    let commitModel = commits[j]
-                                    let files: (pictures: [PictureModel], codes: [SourceCodeModel]) = try data.tags[i].commits[j].files
-                                        .reduce((pictures: [], codes: [])) { (all, file) in
-                                            if file.type == .text {
-                                                return (pictures: all.pictures, codes: all.codes + [.init(
-                                                    filename: file.name,
-                                                    code: file.content,
-                                                    commitID: try commitModel.requireID()
-                                                )])
-                                            } else {
-                                                return (pictures: all.pictures + [.init(
-                                                    filename: file.name,
-                                                    bin: file.content,
-                                                    commitID: try commitModel.requireID()
-                                                )], codes: all.codes)
-                                            }
-                                        }
-                                    async let createPictures: () = commitModel.$pictures.create(files.pictures, on: transaction)
-                                    async let createCodes: () = commitModel.$codes.create(files.codes, on: transaction)
-                                    _ = try await [createPictures, createCodes]
-                                }
-                            }
-                        }
+            let allCommits: [[CommitModel]] = try tags.enumerated().map { (i, tagModel) in
+                try data.tags[i].commits.enumerated().map { (index, commit) in
+                        .init(step: index + 1, message: commit.message, tagID: try tagModel.requireID())
+                }
+            }
+            try await allCommits
+                .flatMap { $0 }
+                .create(on: transaction)
+            
+            let allPictures = try allCommits.enumerated().flatMap { (i, commitModels) -> [[PictureModel]] in
+                try commitModels.enumerated().compactMap { (j, commitModel) -> [PictureModel] in
+                    let commit = data.tags[i].commits[j]
+                    return try commit.files.enumerated().compactMap { (k, file) -> PictureModel? in
+                        guard file.type == .image else { return nil }
+                        return .init(filename: file.name, bin: file.content, commitID: try commitModel.requireID())
+                    }
+                }
+            }
+            try await allPictures
+                .flatMap { $0 }
+                .create(on: transaction)
+            
+            let allCodes = try allCommits.enumerated().flatMap { (i, commitModels) -> [[SourceCodeModel]] in
+                try commitModels.enumerated().compactMap { (j, commitModel) -> [SourceCodeModel] in
+                    let commit = data.tags[i].commits[j]
+                    return try commit.files.enumerated().compactMap { (k, file) -> SourceCodeModel? in
+                        guard file.type == .text else { return nil }
+                        return .init(filename: file.name, code: file.content, commitID: try commitModel.requireID())
                     }
                 }
             }
             
-            for i in 0 ..< tags.count {
-                let tagModel = tags[i]
-                let commits: [CommitModel] = try data.tags[i].commits.enumerated().map { (index, commit) in
-                        .init(step: index + 1, message: commit.message, tagID: try tagModel.requireID())
-                }
-                try await tagModel.$commits.create(commits, on: transaction)
-                for j in 0 ..< commits.count {
-                    let commitModel = commits[j]
-                    let files: (pictures: [PictureModel], codes: [SourceCodeModel]) = try data.tags[i].commits[j].files
-                        .reduce((pictures: [], codes: [])) { (all, file) in
-                            if file.type == .text {
-                                return (pictures: all.pictures, codes: all.codes + [.init(
-                                    filename: file.name,
-                                    code: file.content,
-                                    commitID: try commitModel.requireID()
-                                )])
-                            } else {
-                                return (pictures: all.pictures + [.init(
-                                    filename: file.name,
-                                    bin: file.content,
-                                    commitID: try commitModel.requireID()
-                                )], codes: all.codes)
-                            }
-                        }
-                    async let createPictures: () = commitModel.$pictures.create(files.pictures, on: transaction)
-                    async let createCodes: () = commitModel.$codes.create(files.codes, on: transaction)
-                    _ = try await [createPictures, createCodes]
-                }
-            }
+            try await allCodes
+                .flatMap { $0 }
+                .create(on: transaction)
         }
     }
         
