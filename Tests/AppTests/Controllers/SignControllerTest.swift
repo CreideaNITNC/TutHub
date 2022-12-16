@@ -24,7 +24,7 @@ final class SignControllerTest: XCTestCase {
             ])
         } afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
-            XCTAssertContains(res.body.string, "TutHub Home")
+            XCTAssertContains(res.body.string, "リポジトリ一覧")
         }
     }
     
@@ -48,7 +48,7 @@ final class SignControllerTest: XCTestCase {
             ])
         } afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
-            XCTAssertContains(res.body.string, "TutHub Home")
+            XCTAssertContains(res.body.string, "リポジトリ一覧")
             
             try app.test(.POST, "sign/in") { req in
                 try req.content.encode([
@@ -57,7 +57,7 @@ final class SignControllerTest: XCTestCase {
                 ])
             } afterResponse: { res in
                 XCTAssertEqual(res.status, .ok)
-                XCTAssertContains(res.body.string, "TutHub Home")
+                XCTAssertContains(res.body.string, "リポジトリ一覧")
             }
         }
     }
