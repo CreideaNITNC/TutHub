@@ -5,37 +5,44 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/styles/reset.css">
+    <link rel="stylesheet" href="/styles/sign.css">
     <title>Sign</title>
 </head>
 <body>
+<div class="app">
+    <form action="/sign/in" method="post">
+        <h1>Sign in</h1>
+        <label>
+            <p><input type="text" class="input" placeholder="メールアドレス" name="mailAddress"></p>
+        </label>
+        <label>
+            <p><input type="password" class="input" placeholder="パスワード" name="password"></p>
+        </label>
+        <p><input type="submit" class="submit" vaue="Sign In"></p>
+        #if(isFailed):
+            <p>メールアドレス、またはパスワードが違います。</p>
+        #endif
+    </form>
 
-<form action="/sign/in" method="post">
-  <label>
-    <p><input type="text" placeholder="メールアドレス" name="mailAddress"></p>
-  </label>
-  <label>
-    <p><input type="password" placeholder="パスワード" name="password"></p>
-  </label>
-  <p><input type="submit" vaue="Sign In"></p>
-</form>
 
-#if(isFailed):
-<p>メールアドレス、またはパスワードが違います。</p>
-#endif
+    <form action="/sign/up" method="post">
+        <h1>Sign up</h1>
+        <label>
+            <p><input type="text" class="input" placeholder="メールアドレス" name="mailAddress"></p>
+        </label>
+        <label>
+            <p><input type="password" class="input" placeholder="パスワード" name="password"></p>
+        </label>
+        <p><input type="submit" class="submit" vaue="Sign Up"></p>
+        
+        #if(isAlreadyRegistered):
+            <p>そのメールアドレスはすでに登録されています。</p>
+        #endif
+    </form>
 
-<form action="/sign/up" method="post">
-  <label>
-    <p><input type="text" placeholder="メールアドレス" name="mailAddress"></p>
-  </label>
-  <label>
-    <p><input type="password" placeholder="パスワード" name="password"></p>
-  </label>
-  <p><input type="submit" vaue="Sign Up"></p>
-</form>
+</div>
 
-#if(isAlreadyRegistered):
-<p>そのメールアドレスはすでに登録されています。</p>
-#endif
 
 
 </body>
