@@ -2,9 +2,9 @@ import Vapor
 
 struct PushData: Content {
     
-    var tags: [Self.Tag]
+    var sections: [Self.Section]
     
-    struct Tag: Content {
+    struct Section: Content {
         var id: UUID
         var name: String
         var commits: [Commit]

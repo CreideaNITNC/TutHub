@@ -15,7 +15,7 @@ final class TutHubRepositoryModel: Model {
     var user: UserModel
     
     @Children(for: \.$repository)
-    var tags: [TagModel]
+    var tags: [SectionModel]
     
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?

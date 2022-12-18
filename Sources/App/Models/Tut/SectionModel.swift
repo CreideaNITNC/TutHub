@@ -1,9 +1,9 @@
 import Vapor
 import Fluent
 
-final class TagModel: Model {
+final class SectionModel: Model {
     
-    static let schema = "tags"
+    static let schema = "sections"
     
     @ID(key: "id")
     var id: UUID?
@@ -17,7 +17,7 @@ final class TagModel: Model {
     @Parent(key: "repository_id")
     var repository: TutHubRepositoryModel
     
-    @Children(for: \.$tag)
+    @Children(for: \.$section)
     var commits: [CommitModel]
     
     @Timestamp(key: "created_at", on: .create)

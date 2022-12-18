@@ -38,15 +38,15 @@ struct DatabaseTutorialPageRepository: TutorialPageDataRepository {
             .first()
     }
     
-    private func eagerLoadTagModel(repository: TutHubRepositoryModel, page: Int) async throws -> TagModel? {
-        return try await TagModel.query(on: db)
+    private func eagerLoadTagModel(repository: TutHubRepositoryModel, page: Int) async throws -> SectionModel? {
+        return try await SectionModel.query(on: db)
             .filter(\.$repository.$id == repository.requireID())
             .filter(\.$number == page)
             .with(\.$commits) { commit in
                 commit.with(\.$codes)
                 commit.with(\.$pictures)
             }
-            .join(CommitModel.self, on: \TagModel.$id == \CommitModel.$tag.$id)
+            .join(CommitModel.self, on: \SectionModel.$id == \CommitModel.$section.$id)
             .sort(\.$number)
             .sort(CommitModel.self, \.$step)
             .first()
