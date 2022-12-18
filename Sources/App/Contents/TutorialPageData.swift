@@ -22,7 +22,7 @@ struct TutorialPageData: Content {
     
     struct Picture: Content {
         var filename: String
-        var encodedBinaryData: String
+        var encodedBinaryData: Data
     }
     
     struct OverView: Content {

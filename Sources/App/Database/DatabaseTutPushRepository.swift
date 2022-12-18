@@ -30,9 +30,8 @@ struct DatabaseTutPushRepository: TutPushRepository {
             let allPictures = try allCommits.enumerated().flatMap { (i, commitModels) -> [[PictureModel]] in
                 try commitModels.enumerated().compactMap { (j, commitModel) -> [PictureModel] in
                     let commit = data.tags[i].commits[j]
-                    return try commit.files.enumerated().compactMap { (k, file) -> PictureModel? in
-                        guard file.type == .image else { return nil }
-                        return .init(filename: file.name, bin: file.content, commitID: try commitModel.requireID())
+                    return try commit.pictures.map { picture -> PictureModel in
+                            .init(filename: picture.name, bin: picture.bin, commitID: try commitModel.requireID())
                     }
                 }
             }
@@ -43,9 +42,8 @@ struct DatabaseTutPushRepository: TutPushRepository {
             let allCodes = try allCommits.enumerated().flatMap { (i, commitModels) -> [[SourceCodeModel]] in
                 try commitModels.enumerated().compactMap { (j, commitModel) -> [SourceCodeModel] in
                     let commit = data.tags[i].commits[j]
-                    return try commit.files.enumerated().compactMap { (k, file) -> SourceCodeModel? in
-                        guard file.type == .text else { return nil }
-                        return .init(filename: file.name, code: file.content, commitID: try commitModel.requireID())
+                    return try commit.codes.map { code -> SourceCodeModel in
+                            .init(filename: code.name, code: code.content, commitID: try commitModel.requireID())
                     }
                 }
             }
