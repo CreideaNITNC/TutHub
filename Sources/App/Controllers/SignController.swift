@@ -13,7 +13,7 @@ struct SignController: RouteCollection {
         guard let user = try await req.signUserRepository.verify(signUser) else {
             return try await req.signViewRender.render(isFailed: true, isAlreadyRegistered: false)
         }
-        req.auth.login(user)
+        try await req.login(user)
         return try await req.homeViewRender.render()
     }
     
@@ -22,7 +22,7 @@ struct SignController: RouteCollection {
         guard let user = try? await req.signUserRepository.signUp(signUser) else {
             return try await req.signViewRender.render(isFailed: false, isAlreadyRegistered: true)
         }
-        req.auth.login(user)
+        try await req.login(user)
         return try await req.homeViewRender.render()
     }
 }

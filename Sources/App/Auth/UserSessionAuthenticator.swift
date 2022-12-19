@@ -1,17 +1,15 @@
 import Vapor
-
-extension User: SessionAuthenticatable {
-    var sessionID: UUID {
-        self.id
-    }
-}
+import Fluent
 
 struct UserSessionAuthenticator: AsyncSessionAuthenticator {
     
-    typealias User = App.User
+    typealias User = App.SessionAuthUserModel
     
     func authenticate(sessionID: UUID, for request: Request) async throws {
-        let user = User(id: sessionID)
-        request.auth.login(user)
+        guard let sessionAuthUser = try await SessionAuthUserModel.query(on: request.db)
+            .filter(\.$sessionID == sessionID)
+            .first()
+        else { return }
+        request.auth.login(sessionAuthUser)
     }
 }

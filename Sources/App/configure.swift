@@ -27,6 +27,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CommitModel.Migration())
     app.migrations.add(SourceCodeModel.Migration())
     app.migrations.add(PictureModel.Migration())
+    app.migrations.add(SessionAuthUserModel.Migration())
     
     app.views.use(.leaf)
     
