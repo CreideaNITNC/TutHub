@@ -14,8 +14,8 @@ final class CommitModel: Model {
     @Field(key: "message")
     var message: String
     
-    @Parent(key: "tag_id")
-    var tag: TagModel
+    @Parent(key: "section_id")
+    var section: SectionModel
     
     @Children(for: \.$commit)
     var codes: [SourceCodeModel]
@@ -32,10 +32,10 @@ final class CommitModel: Model {
     
     init() { }
     
-    init(id: UUID? = nil, step: Int, message: String, tagID: TagModel.IDValue) {
+    init(id: UUID? = nil, step: Int, message: String, sectionID: SectionModel.IDValue) {
         self.id = id
         self.step = step
         self.message = message
-        self.$tag.id = tagID
+        self.$section.id = sectionID
     }
 }

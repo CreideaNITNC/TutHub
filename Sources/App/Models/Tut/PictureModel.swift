@@ -12,7 +12,7 @@ final class PictureModel: Model {
     var filename: String
     
     @Field(key: "bin")
-    var bin: String
+    var bin: Data
     
     @Parent(key: "commit_id")
     var commit: CommitModel
@@ -28,7 +28,7 @@ final class PictureModel: Model {
     init(
         id: UUID? = nil,
         filename: String,
-        bin: String,
+        bin: Data,
         commitID: CommitModel.IDValue
     ) {
         self.id = id

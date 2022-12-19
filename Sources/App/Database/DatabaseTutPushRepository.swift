@@ -11,16 +11,16 @@ struct DatabaseTutPushRepository: TutPushRepository {
         }
         
         try await db.transaction { transaction in
-            try await TagModel.query(on: transaction).filter(\.$repository.$id == (try repository.requireID())).delete()
+            try await SectionModel.query(on: transaction).filter(\.$repository.$id == (try repository.requireID())).delete()
             
-            let tags: [TagModel] = try data.tags.enumerated().map { (index, tag) in
-                    .init(name: tag.name, number: index + 1, repositoryID: try repository.requireID())
+            let sections: [SectionModel] = try data.sections.enumerated().map { (index, section) in
+                    .init(name: section.name, number: index + 1, repositoryID: try repository.requireID())
             }
-            try await tags.create(on: transaction)
+            try await sections.create(on: transaction)
             
-            let allCommits: [[CommitModel]] = try tags.enumerated().map { (i, tagModel) in
-                try data.tags[i].commits.enumerated().map { (index, commit) in
-                        .init(step: index + 1, message: commit.message, tagID: try tagModel.requireID())
+            let allCommits: [[CommitModel]] = try sections.enumerated().map { (i, sectionModel) in
+                try data.sections[i].commits.enumerated().map { (index, commit) in
+                        .init(step: index + 1, message: commit.message, sectionID: try sectionModel.requireID())
                 }
             }
             try await allCommits
@@ -29,10 +29,9 @@ struct DatabaseTutPushRepository: TutPushRepository {
             
             let allPictures = try allCommits.enumerated().flatMap { (i, commitModels) -> [[PictureModel]] in
                 try commitModels.enumerated().compactMap { (j, commitModel) -> [PictureModel] in
-                    let commit = data.tags[i].commits[j]
-                    return try commit.files.enumerated().compactMap { (k, file) -> PictureModel? in
-                        guard file.type == .image else { return nil }
-                        return .init(filename: file.name, bin: file.content, commitID: try commitModel.requireID())
+                    let commit = data.sections[i].commits[j]
+                    return try commit.pictures.map { picture -> PictureModel in
+                            .init(filename: picture.name, bin: picture.bin, commitID: try commitModel.requireID())
                     }
                 }
             }
@@ -42,10 +41,9 @@ struct DatabaseTutPushRepository: TutPushRepository {
             
             let allCodes = try allCommits.enumerated().flatMap { (i, commitModels) -> [[SourceCodeModel]] in
                 try commitModels.enumerated().compactMap { (j, commitModel) -> [SourceCodeModel] in
-                    let commit = data.tags[i].commits[j]
-                    return try commit.files.enumerated().compactMap { (k, file) -> SourceCodeModel? in
-                        guard file.type == .text else { return nil }
-                        return .init(filename: file.name, code: file.content, commitID: try commitModel.requireID())
+                    let commit = data.sections[i].commits[j]
+                    return try commit.codes.map { code -> SourceCodeModel in
+                            .init(filename: code.name, code: code.content, commitID: try commitModel.requireID())
                     }
                 }
             }

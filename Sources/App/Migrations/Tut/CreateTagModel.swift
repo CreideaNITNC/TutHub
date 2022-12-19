@@ -1,11 +1,11 @@
 import Vapor
 import Fluent
 
-extension TagModel {
+extension SectionModel {
     struct Migration: AsyncMigration {
         func prepare(on database: Database) async throws {
-            let sample = TagModel()
-            try await database.schema(TagModel.schema)
+            let sample = SectionModel()
+            try await database.schema(SectionModel.schema)
                 .id()
                 .field(sample.$name.key, .string, .required)
                 .field(sample.$number.key, .uint, .required)
@@ -16,7 +16,7 @@ extension TagModel {
         }
         
         func revert(on database: FluentKit.Database) async throws {
-            try await database.schema(TagModel.schema).delete()
+            try await database.schema(SectionModel.schema).delete()
         }
     }
 }

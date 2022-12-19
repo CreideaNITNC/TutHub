@@ -2,9 +2,9 @@ import Vapor
 
 struct PushData: Content {
     
-    var tags: [Self.Tag]
+    var sections: [Self.Section]
     
-    struct Tag: Content {
+    struct Section: Content {
         var id: UUID
         var name: String
         var commits: [Commit]
@@ -13,17 +13,17 @@ struct PushData: Content {
     struct Commit: Content {
         var id: UUID
         var message: String
-        var files: [File]
+        var pictures: [Picture]
+        var codes: [SourceCode]
     }
-
-    struct File: Content {
+    
+    struct SourceCode: Content {
         var name: String
-        var type: FileType
         var content: String
     }
     
-    enum FileType: String, Content {
-        case image, text
+    struct Picture: Content {
+        var name: String
+        var bin: Data
     }
-    
 }
