@@ -10,8 +10,8 @@ extension CommitModel {
                 .field(sample.$step.key, .uint, .required)
                 .field(sample.$message.key, .string, .required)
                 .field(sample.$section.$id.key, .uuid, .required, .references(SectionModel.schema, SectionModel().$id.key, onDelete: .cascade))
-                .field(sample.$createdAt.$timestamp.key, .date, .required)
-                .field(sample.$updatedAt.$timestamp.key, .date, .required)
+                .field(sample.$createdAt.$timestamp.key, .datetime, .required)
+                .field(sample.$updatedAt.$timestamp.key, .datetime, .required)
                 .create()
         }
         
