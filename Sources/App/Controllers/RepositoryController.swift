@@ -19,14 +19,14 @@ struct RepositoryController: RouteCollection {
             var name: String
         }
         let create = try req.content.decode(Create.self)
-        let user = try req.auth.require(User.self)
+        let user = try req.requireUser()
         try await TutHubRepositoryModel(name: create.name, userID: user.id).create(on: req.db)
         return try await req.homeViewRender.render()
     }
     
     func delete(req: Request) async throws -> View {
         let reposiotryName = req.parameters.get("repository")!
-        let user = try req.auth.require(User.self)
+        let user = try req.requireUser()
         try await TutHubRepositoryModel.query(on: req.db)
             .filter(\.$user.$id == user.id)
             .filter(\.$name == reposiotryName)
