@@ -10,8 +10,8 @@ extension SectionModel {
                 .field(sample.$name.key, .string, .required)
                 .field(sample.$number.key, .uint, .required)
                 .field(sample.$repository.$id.key, .uuid, .required, .references(TutHubRepositoryModel.schema, TutHubRepositoryModel().$id.key, onDelete: .cascade))
-                .field(sample.$createdAt.$timestamp.key, .date, .required)
-                .field(sample.$updatedAt.$timestamp.key, .date, .required)
+                .field(sample.$createdAt.$timestamp.key, .datetime, .required)
+                .field(sample.$updatedAt.$timestamp.key, .datetime, .required)
                 .create()
         }
         

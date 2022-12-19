@@ -17,6 +17,12 @@ final class SignUserModel: Model {
     @Parent(key: "user_id")
     var userModel: UserModel
     
+    @Timestamp(key: "created_at", on: .create)
+    var createdAt: Date?
+    
+    @Timestamp(key: "updated_at", on: .update)
+    var updatedAt: Date?
+    
     init() { }
     
     init(id: UUID? = nil, mailAddress: String, passwordHash: String, userModelID: UserModel.IDValue) {
