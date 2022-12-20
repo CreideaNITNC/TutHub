@@ -59,10 +59,11 @@ final class SignUserRepositoryTest: XCTestCase {
     }
     
     func test_SignUp() async throws {
-        let newUser = SignUserContent(mailAddress: "new@user.com", password: "new$user@password")
-        let signUpUser = try await repository.signUp(newUser)
+        let newSignUpUser = SignUpUserContent(mailAddress: "new@user.com", name: "newUser", password: "new$user@password")
+        let signUpUser = try await repository.signUp(newSignUpUser)
         
-        let signInUser = try await repository.verify(newUser)
+        let newSignInUser = SignInUserContent(mailAddress: "new@user.com", password: "new$user@password")
+        let signInUser = try await repository.verify(newSignInUser)
         XCTAssertEqual(signUpUser, signInUser)
     }
     

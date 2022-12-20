@@ -8,6 +8,9 @@ final class UserModel: Model {
     @ID(key: "id")
     var id: UUID?
     
+    @Field(key: "name")
+    var name: String
+    
     @OptionalChild(for: \.$userModel)
     var signUserModel: SignUserModel?
     
@@ -22,8 +25,9 @@ final class UserModel: Model {
     
     init() { }
     
-    init(id: UUID? = nil) {
+    init(id: UUID? = nil, name: String) {
         self.id = id
+        self.name = name
     }
     
     var user: User {

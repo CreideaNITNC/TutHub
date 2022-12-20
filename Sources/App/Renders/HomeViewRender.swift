@@ -15,16 +15,21 @@ struct HomeViewRender: HomeViewRenderable {
     
     var db: Database
     
+    var usernameRepository: UsernameRepository
+    
     func render() async throws -> View {
         try await renderer.render(Self.leaf, try await repositories())
     }
     
     private func repositories() async throws -> RepositoriesContent {
-        .init(
+        guard let username = try await usernameRepository.find(user) else {
+            throw Abort(.unauthorized)
+        }
+        return .init(
             repositories: try await TutHubRepositoryModel.query(on: db)
                 .filter(\.$user.$id == user.id)
                 .all()
-                .map { .init(name: $0.name, link: "/\(user.id)/\($0.name)")}
+                .map { .init(name: $0.name, link: "/\(username)/\($0.name)")}
         )
     }
 }
