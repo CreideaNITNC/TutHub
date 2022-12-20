@@ -1,6 +1,6 @@
 import Vapor
 
-struct SignUserContent: Content {
+struct SignInUserContent: Content {
     
     var mailAddress: String
     

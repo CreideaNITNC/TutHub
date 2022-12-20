@@ -44,7 +44,8 @@ final class SignControllerTest: XCTestCase {
         try app.test(.POST, "sign/up") { req in
             try req.content.encode([
                 "mailAddress": "imanishi@outlook.com",
-                "password": "012@imanishi"
+                "name": "Imanishi",
+                "password": "012@imanishi",
             ])
         } afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
@@ -66,7 +67,8 @@ final class SignControllerTest: XCTestCase {
         try app.test(.POST, "sign/up") { req in
             try req.content.encode([
                 "mailAddress": "tanaka@icloud.com",
-                "password": "tanaka@0212"
+                "name": "Tanaka",
+                "password": "tanaka@0212",
             ])
         } afterResponse: { res in
             XCTAssertEqual(res.status, .ok)

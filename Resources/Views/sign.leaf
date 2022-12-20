@@ -32,6 +32,9 @@
             <p><input type="text" class="input" placeholder="メールアドレス" name="mailAddress"></p>
         </label>
         <label>
+            <p><input type="text" class="input" placeholder="名前" name="name"></p>
+        </label>
+        <label>
             <p><input type="password" class="input" placeholder="パスワード" name="password"></p>
         </label>
         <p><input type="submit" class="submit" vaue="Sign Up"></p>
