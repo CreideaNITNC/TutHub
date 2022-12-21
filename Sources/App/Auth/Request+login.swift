@@ -8,10 +8,10 @@ extension Request {
     }
     
     func requireUser() throws -> User {
-        try auth.require(SessionAuthUserModel.self).user
+        try auth.get(User.self) ?? auth.require(SessionAuthUserModel.self).user
     }
     
     var user: User? {
-        auth.get(SessionAuthUserModel.self)?.user
+        auth.get(User.self) ?? auth.get(SessionAuthUserModel.self)?.user
     }
 }

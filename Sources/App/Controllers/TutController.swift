@@ -5,6 +5,8 @@ struct TutController: RouteCollection {
     
     func boot(routes: RoutesBuilder) throws {
         let tut = routes.grouped("tut")
+            .grouped(UserBasicAuthenticator())
+            .grouped(User.guardMiddleware())
         tut.post(":username", ":repository", use: push)
     }
     
