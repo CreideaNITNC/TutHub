@@ -26,7 +26,7 @@ final class SessionAuthUserModel: Model, SessionAuthenticatable {
     }
     
     var user: User {
-        .init(id: userID)
+        .init(id: .init(value: userID))
     }
     
 }

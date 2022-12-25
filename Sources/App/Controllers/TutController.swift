@@ -19,7 +19,7 @@ struct TutController: RouteCollection {
             throw Abort(.unauthorized)
         }
         
-        try await req.tutPushRepository.push(userID: user.id, repositoryName: repositoryName, data: data)
+        try await req.tutPushRepository.push(userID: user.id.value, repositoryName: repositoryName, data: data)
         return .created
     }
 }

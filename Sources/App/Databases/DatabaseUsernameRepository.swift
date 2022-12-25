@@ -14,7 +14,7 @@ struct DatabaseUsernameRepository: UsernameRepository {
     
 
     func find(_ user: User) async throws -> String? {
-        try await UserModel.find(user.id, on: db)?.name
+        try await UserModel.find(user.id.value, on: db)?.name
     }
     
 }

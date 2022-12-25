@@ -2,7 +2,7 @@ import Vapor
 
 extension Request {
     func login(_ user: User) async throws {
-        let authUser = SessionAuthUserModel(userID: user.id)
+        let authUser = SessionAuthUserModel(userID: user.id.value)
         try await authUser.create(on: db)
         self.auth.login(authUser)
     }

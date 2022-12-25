@@ -15,6 +15,6 @@ struct TutHubPageController: RouteCollection {
             throw Abort(.unauthorized)
         }
         
-        return try await req.tutorialPageDataRepository.find(userID: user.id, repositoryName: repositoryName, page: page)
+        return try await req.tutorialPageDataRepository.find(userID: user.id.value, repositoryName: repositoryName, page: page)
     }
 }

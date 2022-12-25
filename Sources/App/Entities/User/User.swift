@@ -1,5 +1,5 @@
 import Vapor
 
 struct User: Equatable, Hashable, Identifiable {
-    var id: UUID
+    var id: UserID
 }

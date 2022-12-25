@@ -27,7 +27,7 @@ struct HomeViewRender: HomeViewRenderable {
         }
         return .init(
             repositories: try await TutHubRepositoryModel.query(on: db)
-                .filter(\.$user.$id == user.id)
+                .filter(\.$user.$id == user.id.value)
                 .all()
                 .map { .init(name: $0.name, link: "/\(username)/\($0.name)")}
         )

@@ -4,8 +4,8 @@ struct SignInUser: Identifiable, Hashable, Equatable {
     
     var id: UserID
     
-    var username: String
+    var username: Username
     
-    var passwordHash: String
+    var passwordHash: UserPasswordHash
     
 }
