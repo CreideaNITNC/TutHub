@@ -2,6 +2,6 @@ struct OverviewSection: Identifiable, Hashable, Equatable {
     
     var id: SectionID
     
-    var title: String
+    var title: SectionTitle
     
 }

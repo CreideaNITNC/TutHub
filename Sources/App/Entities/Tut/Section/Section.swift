@@ -1,3 +1,3 @@
-struct Section: Identifiable {
+struct Section: Identifiable, Hashable, Equatable {
     var id: SectionID
 }
