@@ -23,7 +23,7 @@ final class UsernameTest: XCTestCase {
         let _ = try Username("Hello-World0189")
     }
     
-    func test_アンダースコア() throws {
+    func test_不正値アンダースコア() throws {
         XCTAssertThrowsError(try Username("Hello_World"))
     }
     
