@@ -7,14 +7,11 @@ struct TutHubPageController: RouteCollection {
     }
     
     func index(req: Request) async throws -> TutorialPageData {
-        let username = req.parameters.get("username")!
-        let repositoryName = req.parameters.get("repository")!
-        let page = req.parameters.get("page", as: Int.self)!
+        let username = try Username(req.parameters.get("username")!)
+        let repositoryName = try RepositoryName(req.parameters.get("repository")!)
+        let page = try SectionPage(req.parameters.get("page", as: Int.self)!)
         
-        guard let user = try await req.usernameRepository.user(username) else {
-            throw Abort(.unauthorized)
-        }
-        
-        return try await req.tutorialPageDataRepository.find(userID: user.id.value, repositoryName: repositoryName, page: page)
+        let content = try await req.tutHubPageService.read(username, repositoryName, page)
+        return .init(username, repositoryName, page, content)
     }
 }

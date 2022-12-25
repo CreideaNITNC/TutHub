@@ -5,60 +5,73 @@ struct DatabaseTutPushRepository: TutPushRepository {
     
     var db: Database
     
-    func push(userID: UUID, repositoryName: String, data: PushData) async throws {
-        guard let repository = try await findRepository(userID, repositoryName) else {
-            throw Abort(.badRequest)
-        }
-        
+    
+    func push(_ repository: TutHubContentRepository) async throws {
         try await db.transaction { transaction in
-            try await SectionModel.query(on: transaction).filter(\.$repository.$id == (try repository.requireID())).delete()
+            try await deleteSection(repository.id, on: transaction)
             
-            let sections: [SectionModel] = try data.sections.enumerated().map { (index, section) in
-                    .init(name: section.name, number: index + 1, repositoryID: try repository.requireID())
-            }
-            try await sections.create(on: transaction)
+            let sectionIDs = try await createSections(repository, on: transaction)
+            let commitIDs = try await createCommits(repository, sectionIDs, on: transaction)
             
-            let allCommits: [[CommitModel]] = try sections.enumerated().map { (i, sectionModel) in
-                try data.sections[i].commits.enumerated().map { (index, commit) in
-                        .init(step: index + 1, message: commit.message, sectionID: try sectionModel.requireID())
-                }
-            }
-            try await allCommits
-                .flatMap { $0 }
-                .create(on: transaction)
-            
-            let allPictures = try allCommits.enumerated().flatMap { (i, commitModels) -> [[PictureModel]] in
-                try commitModels.enumerated().compactMap { (j, commitModel) -> [PictureModel] in
-                    let commit = data.sections[i].commits[j]
-                    return try commit.pictures.map { picture -> PictureModel in
-                            .init(filename: picture.name, bin: picture.bin, commitID: try commitModel.requireID())
-                    }
-                }
-            }
-            try await allPictures
-                .flatMap { $0 }
-                .create(on: transaction)
-            
-            let allCodes = try allCommits.enumerated().flatMap { (i, commitModels) -> [[SourceCodeModel]] in
-                try commitModels.enumerated().compactMap { (j, commitModel) -> [SourceCodeModel] in
-                    let commit = data.sections[i].commits[j]
-                    return try commit.codes.map { code -> SourceCodeModel in
-                            .init(filename: code.name, code: code.content, commitID: try commitModel.requireID())
-                    }
-                }
-            }
-            
-            try await allCodes
-                .flatMap { $0 }
-                .create(on: transaction)
+            try await createPictures(repository, commitIDs, on: transaction)
+            try await createCodes(repository, commitIDs, on: transaction)
         }
     }
-        
-    private func findRepository(_ userID: UUID, _ repositoryName: String) async throws -> TutHubRepositoryModel? {
-        try await TutHubRepositoryModel.query(on: db)
-            .filter(\.$user.$id == userID)
-            .filter(\.$name == repositoryName)
-            .first()
+    
+    private func deleteSection(_ repositoryID: RepositoryID, on transaction: Database) async throws {
+        try await SectionModel.query(on: transaction)
+            .filter(\.$repository.$id == repositoryID.value)
+            .delete()
+    }
+    
+    private func createSections(_ repository: TutHubContentRepository, on transaction: Database) async throws -> [SectionID] {
+        let sections = repository.sections
+            .enumerated()
+            .map { (index, section) in
+                SectionModel(name: section.title.value, number: index + 1, repositoryID: repository.id.value)
+            }
+        try await sections.create(on: transaction)
+        return try sections.map { SectionID(value: try $0.requireID()) }
+    }
+    
+    private func createCommits(_ repository: TutHubContentRepository, _ sectionIDs: [SectionID], on transaction: Database) async throws -> [[CommitID]] {
+        let commits: [[CommitModel]] = repository.sections.map { section in
+            section.commits.enumerated().map { (index, commit) in
+                    .init(step: index + 1, message: commit.message.value, sectionID: section.id.value)
+            }
+        }
+        try await commits.flatMap({$0}).create(on: transaction)
+        return try commits.map { try $0.map { CommitID(value: try $0.requireID()) } }
+    }
+    
+    private func createPictures(_ repository: TutHubContentRepository, _ commitIDs: [[CommitID]], on transaction: Database) async throws {
+        try await repository.sections.enumerated().flatMap { (sectionIndex, section) in
+            section.commits.enumerated().flatMap { (commitIndex, commit) in
+                commit.pictures.enumerated().map { (pictureIndex, picture) in
+                    PictureModel(
+                        filename: picture.filename.value,
+                        extension: picture.extension,
+                        bin: picture.binary.value,
+                        number: pictureIndex + 1,
+                        commitID: commitIDs[sectionIndex][commitIndex].value
+                    )
+                }
+            }
+        }.create(on: transaction)
+    }
+    
+    private func createCodes(_ repository: TutHubContentRepository, _ commitIDs: [[CommitID]], on transaction: Database) async throws {
+        try await repository.sections.enumerated().flatMap { (sectionIndex, section) in
+            section.commits.enumerated().flatMap { (commitIndex, commit) in
+                commit.codes.map { code in
+                    SourceCodeModel(
+                        filename: code.filename.value,
+                        code: code.text.value,
+                        commitID: commitIDs[sectionIndex][commitIndex].value
+                    )
+                }
+            }
+        }.create(on: transaction)
     }
 }
 

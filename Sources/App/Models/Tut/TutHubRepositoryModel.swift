@@ -11,8 +11,11 @@ final class TutHubRepositoryModel: Model {
     @Field(key: "name")
     var name: String
     
+    @Field(key: "title")
+    var title: String
+    
     @Parent(key: "user_id")
-    var user: UserModel
+    var userModel: UserModel
     
     @Children(for: \.$repository)
     var sections: [SectionModel]
@@ -28,6 +31,6 @@ final class TutHubRepositoryModel: Model {
     init(id: UUID? = nil, name: String, userID: UserModel.IDValue) {
         self.id = id
         self.name = name
-        self.$user.id = userID
+        self.$userModel.id = userID
     }
 }

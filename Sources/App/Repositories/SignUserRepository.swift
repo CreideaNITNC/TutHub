@@ -2,8 +2,18 @@ import Vapor
 
 protocol SignUserRepository {
     
-    func verify(_ user: SignInUserContent) async throws -> User?
+    func find(_ name: Username) async throws -> SignUser?
     
-    func signUp(_ user: SignUpUserContent) async throws -> User
+    func find(_ mail: MailAddress) async throws -> SignUser?
     
+    func isMailOrNameExits(_ name: Username, _ mail: MailAddress) async throws -> Bool
+    
+    func create(_ name: Username, _ mailAddress: MailAddress, _ passwordHash: UserPasswordHash) async throws -> SignUser
+    
+}
+
+extension Request {
+    var signUserRepository: SignUserRepository {
+        DatabaseSignUserRepository(db: db)
+    }
 }

@@ -5,61 +5,62 @@ struct DatabaseSignUserRepository: SignUserRepository {
     
     var db: Database
     
-    var password: AsyncPasswordHasher
-    
-    func verify(_ user: SignInUserContent) async throws -> User? {
-        guard
-            let candidate = try await findSignUserModel(user.mailAddress),
-            try await password.verify(user.password, created: candidate.passwordHash)
-        else {
-            return nil
-        }
-        try await candidate.$userModel.load(on: db)
-        return candidate.userModel.user
-    }
-    
-    func signUp(_ user: SignUpUserContent) async throws -> User {
-        guard !(try await isAlreadyExistMailAddress(user.mailAddress)) else {
-            throw Abort(.badRequest, reason: "the mail address is already registered")
-        }
-        guard !(try await isAlreadyExistName(user.name)) else {
-            throw Abort(.badRequest, reason: "the name is already registered")
-        }
-        
-        let userModel = try await createUserModelAndSignUserModel(by: user)
-        return userModel.user
-    }
-    
-    
-    private func isAlreadyExistMailAddress(_ mailAddress: String) async throws -> Bool {
-        try await findSignUserModel(mailAddress) != nil
-    }
-    
-    private func isAlreadyExistName(_ name: String) async throws -> Bool {
-        try await UserModel.query(on: db).filter(\.$name == name).first() != nil
-    }
-    
-    private func findSignUserModel(_ mailAddress: String) async throws -> SignUserModel? {
+    func find(_ name: Username) async throws -> SignUser? {
         try await SignUserModel.query(on: db)
-            .filter(\.$mailAddress == mailAddress)
+            .join(UserModel.self, on: \UserModel.$id == \SignUserModel.$userModel.$id)
+            .filter(UserModel.self, \.$name == name.value)
             .first()
+            .map { model in
+                try .init(
+                    id: .init(value: model.requireID()),
+                    username: name,
+                    mailAddress: .init(model.mailAddress),
+                    passwordHash: .init(value: model.passwordHash)
+                )
+            }
     }
     
-    private func createUserModelAndSignUserModel(by user: SignUpUserContent) async throws -> UserModel {
-        let userModel = UserModel(name: user.name)
-        let passwordHash = try await password.hash(user.password)
-        
+    func find(_ mail: MailAddress) async throws -> SignUser? {
+        try await SignUserModel.query(on: db)
+            .filter(\.$mailAddress == mail.value)
+            .with(\.$userModel)
+            .first()
+            .map { signUserModel in
+                try .init(
+                    id: .init(value: signUserModel.$userModel.id),
+                    username: .init(signUserModel.userModel.name),
+                    mailAddress: .init(signUserModel.mailAddress),
+                    passwordHash: .init(value: signUserModel.passwordHash)
+                )
+            }
+    }
+    
+    func isMailOrNameExits(_ name: Username, _ mail: MailAddress) async throws -> Bool {
+        try await SignUserModel.query(on: db)
+            .join(UserModel.self, on: \UserModel.$id == \SignUserModel.$userModel.$id)
+            .group(.or) { group in
+                group.filter(UserModel.self, \.$name == name.value)
+                    .filter(\.$mailAddress == mail.value)
+            }
+            .first() != nil
+    }
+    
+    func create(_ name: Username, _ mailAddress: MailAddress, _ passwordHash: UserPasswordHash) async throws -> SignUser {
+        let userModel = UserModel(name: name.value)
         try await db.transaction { transaction in
             try await userModel.create(on: transaction)
-            
-            let signUserModel = SignUserModel(
-                mailAddress: user.mailAddress,
-                passwordHash: passwordHash,
-                userModelID: try userModel.requireID()
+            let signUserModel = try SignUserModel(
+                mailAddress: mailAddress.value,
+                passwordHash: passwordHash.value,
+                userModelID: userModel.requireID()
             )
-            try await userModel.$signUserModel.create(signUserModel, on: transaction)
+            try await signUserModel.create(on: transaction)
         }
-        
-        return userModel
+        return try .init(
+            id: .init(value: userModel.requireID()),
+            username: name,
+            mailAddress: mailAddress,
+            passwordHash: passwordHash
+        )
     }
 }

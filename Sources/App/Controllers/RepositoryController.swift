@@ -11,7 +11,7 @@ struct RepositoryController: RouteCollection {
     }
     
     func index(req: Request) async throws -> View {
-        try await req.homeViewRender.render()
+        try await req.homeViewRender().render()
     }
     
     func create(req: Request) async throws -> View {
@@ -21,14 +21,14 @@ struct RepositoryController: RouteCollection {
         let create = try req.content.decode(Create.self)
         let user = try req.requireUser()
         try await TutHubRepositoryModel(name: create.name, userID: user.id.value).create(on: req.db)
-        return try await req.homeViewRender.render()
+        return try await req.homeViewRender().render()
     }
     
     func delete(req: Request) async throws -> View {
         let reposiotryName = req.parameters.get("repository")!
         let user = try req.requireUser()
         try await TutHubRepositoryModel.query(on: req.db)
-            .filter(\.$user.$id == user.id.value)
+            .filter(\.$userModel.$id == user.id.value)
             .filter(\.$name == reposiotryName)
             .delete()
         return try await index(req: req)

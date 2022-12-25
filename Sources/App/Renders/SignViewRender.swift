@@ -17,3 +17,9 @@ struct SignViewRender: SignViewRenderable {
         ])
     }
 }
+
+extension Request {
+    var signViewRender: SignViewRenderable {
+        SignViewRender(renderer: leaf)
+    }
+}

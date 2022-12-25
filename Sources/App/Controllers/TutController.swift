@@ -15,11 +15,9 @@ struct TutController: RouteCollection {
         let repositoryName = req.parameters.get("repository")!
         let data = try req.content.decode(PushData.self)
         
-        guard let user = try await req.usernameRepository.user(username) else {
-            throw Abort(.unauthorized)
-        }
+        let user = try req.requireUser()
         
-        try await req.tutPushRepository.push(userID: user.id.value, repositoryName: repositoryName, data: data)
+        try await req.pushService.push(user, RepositoryName(repositoryName), data)
         return .created
     }
 }
