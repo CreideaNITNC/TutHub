@@ -12,7 +12,7 @@ struct Username: Hashable, Equatable {
     }
     
     private static func isValid(_ name: String) -> Bool {
-        let regex = "[a-zA-Z0-0\\-]+"
+        let regex = "[a-zA-Z0-9-]+"
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: name)
     }
 }
