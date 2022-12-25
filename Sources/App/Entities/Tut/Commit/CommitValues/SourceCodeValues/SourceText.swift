@@ -14,7 +14,7 @@ struct SourceText: Hashable, Equatable {
     }
     
     private static func isValid(_ text: String) -> Bool {
-        !text.isEmpty && text.count <= MAX_SOURCE_TEXT_COUNT
+        text.count <= MAX_SOURCE_TEXT_COUNT
     }
     
     private static let MAX_SOURCE_TEXT_COUNT = 10_000
