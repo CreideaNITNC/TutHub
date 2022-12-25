@@ -13,7 +13,7 @@ struct SectionTitle: Hashable, Equatable {
     }
     
     private static func isValid(_ title: String) -> Bool {
-        title.count <= 20
+        !title.isEmpty && title.count <= 20
     }
      
     private static let MAX_TITLE_COUNT = 20
