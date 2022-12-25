@@ -13,7 +13,7 @@ struct CommitMessage: Hashable, Equatable {
     }
     
     private static func isValid(_ message: String) -> Bool {
-        !message.isEmpty && message.count <= MAX_MESSAGE_COUNT
+        message.count <= MAX_MESSAGE_COUNT
     }
     
     private static let MAX_MESSAGE_COUNT = 10_000
