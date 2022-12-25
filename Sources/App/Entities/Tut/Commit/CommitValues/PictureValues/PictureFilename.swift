@@ -14,10 +14,17 @@ struct PictureFilename: Hashable, Equatable {
     }
     
     private static func isValid(_ filename: String) -> Bool {
-        !filename.isEmpty && filename.count <= MAX_SOURCE_FILENAME_COUNT
+        guard !filename.isEmpty else { return false }
+        guard filename.count <= MAX_SOURCE_FILENAME_COUNT else { return false }
+        guard !isPath(filename) else { return false }
+        return true
     }
     
     private static let MAX_SOURCE_FILENAME_COUNT = 100
+
+    private static func isPath(_ filename: String) -> Bool {
+        filename.contains("/")
+    }
     
 }
 
