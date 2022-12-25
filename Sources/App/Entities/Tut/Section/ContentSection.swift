@@ -2,5 +2,5 @@ struct ContentSection: Identifiable, Hashable, Equatable {
     
     var id: SectionID
     
-    var commits: [ContentCommit]
+    var commits: [Commit]
 }
