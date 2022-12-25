@@ -6,4 +6,6 @@ struct CommitPicture: Identifiable, Hashable, Equatable {
     
     var filename: PictureFilename
     
+    var `extension`: PictureFileExtension
+    
 }
