@@ -17,23 +17,28 @@ struct RepositoryController: RouteCollection {
     func create(req: Request) async throws -> View {
         struct Create: Content {
             var name: String
+            var title: String
+            
+            func getRepositoryName() throws -> RepositoryName {
+                try .init(name)
+            }
+            
+            func getRepositoryTitle() throws -> RepositoryTitle {
+                try .init(title)
+            }
         }
         let create = try req.content.decode(Create.self)
         let user = try req.requireUser()
-        try await TutHubRepositoryModel(name: create.name, userID: user.id.value).create(on: req.db)
+        try await req.repositoryListService.append(user, create.getRepositoryName(), create.getRepositoryTitle())
         return try await req.homeViewRender().render()
     }
     
     func delete(req: Request) async throws -> View {
-        guard let reposiotryName = req.parameters.get("repository") else {
+        guard let reposiotryName = try req.parameters.get("repository").map(RepositoryName.init) else {
             throw Abort(.badRequest)
         }
-        
         let user = try req.requireUser()
-        try await TutHubRepositoryModel.query(on: req.db)
-            .filter(\.$userModel.$id == user.id.value)
-            .filter(\.$name == reposiotryName)
-            .delete()
+        try await req.repositoryListService.remove(user, reposiotryName)
         return try await index(req: req)
     }
 }

@@ -28,9 +28,10 @@ final class TutHubRepositoryModel: Model {
     
     init() { }
     
-    init(id: UUID? = nil, name: String, userID: UserModel.IDValue) {
+    init(id: UUID? = nil, name: String, title: String, userID: UserModel.IDValue) {
         self.id = id
         self.name = name
+        self.title = title
         self.$userModel.id = userID
     }
 }
