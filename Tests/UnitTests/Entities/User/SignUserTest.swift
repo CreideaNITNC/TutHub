@@ -39,4 +39,17 @@ final class SignUserTest: XCTestCase {
         
         XCTAssertFalse(user1 == user2)
     }
+    
+    func test_ユーザの取り出し() throws {
+        let id = UserID(value: UUID())
+        
+        let user = try SignUser(
+            id: id,
+            username: .init("name"),
+            mailAddress: .init("test@example.com"),
+            passwordHash: .init(value: "password hash")
+        )
+        
+        XCTAssertEqual(user.user, User(id: id))
+    }
 }

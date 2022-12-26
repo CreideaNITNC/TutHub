@@ -10,4 +10,7 @@ struct SignUser: Identifiable, Hashable, Equatable {
     
     var passwordHash: UserPasswordHash
     
+    var user: User {
+        .init(id: id)
+    }
 }

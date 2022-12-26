@@ -30,7 +30,7 @@ struct SignController: RouteCollection {
         guard let user = try await req.signService.signUp(signUpUser) else {
             return try await req.signViewRender.render(isFailed: false, isAlreadyRegistered: true)
         }
-        try await req.login(user)
+        try await req.sessionLogin(user)
         return try await req.homeViewRender().render()
     }
 }
