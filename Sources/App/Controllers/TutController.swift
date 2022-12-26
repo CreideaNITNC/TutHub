@@ -11,13 +11,15 @@ struct TutController: RouteCollection {
     }
     
     func push(req: Request) async throws -> HTTPStatus {
-        let username = req.parameters.get("username")!
-        let repositoryName = req.parameters.get("repository")!
+        guard
+            let _ = try req.parameters.get("username").map(Username.init),
+            let repositoryName = try req.parameters.get("repository").map(RepositoryName.init)
+        else { throw Abort(.badRequest) }
         let data = try req.content.decode(PushData.self)
         
         let user = try req.requireUser()
         
-        try await req.pushService.push(user, RepositoryName(repositoryName), data)
+        try await req.pushService.push(user, repositoryName, data)
         return .created
     }
 }

@@ -25,7 +25,10 @@ struct RepositoryController: RouteCollection {
     }
     
     func delete(req: Request) async throws -> View {
-        let reposiotryName = req.parameters.get("repository")!
+        guard let reposiotryName = req.parameters.get("repository") else {
+            throw Abort(.badRequest)
+        }
+        
         let user = try req.requireUser()
         try await TutHubRepositoryModel.query(on: req.db)
             .filter(\.$userModel.$id == user.id.value)

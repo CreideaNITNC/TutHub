@@ -7,11 +7,11 @@ struct TutHubPageController: RouteCollection {
     }
     
     func index(req: Request) async throws -> TutorialPageData {
-        let username = try Username(req.parameters.get("username")!)
-        let repositoryName = try RepositoryName(req.parameters.get("repository")!)
-        guard let page = try req.parameters.get("page", as: Int.self).map({ try SectionPage($0) }) else {
-            throw Abort(.badRequest, reason: "ページ番号は数値である必要があります")
-        }
+        guard
+            let username = try req.parameters.get("username").map(Username.init),
+            let repositoryName = try req.parameters.get("repository").map(RepositoryName.init),
+            let page = try req.parameters.get("page", as: Int.self).map(SectionPage.init)
+        else { throw Abort(.badRequest) }
         
         let content = try await req.tutHubPageService.read(username, repositoryName, page)
         return .init(username, repositoryName, page, content)
