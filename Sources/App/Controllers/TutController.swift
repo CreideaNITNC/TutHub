@@ -22,7 +22,9 @@ struct TutController: RouteCollection {
         let user = try req.requireUser()
         
         try await req.pushService.push(user, username, repositoryName, data)
+        
         await cache.remove(username, repositoryName)
+        
         return .created
     }
 }

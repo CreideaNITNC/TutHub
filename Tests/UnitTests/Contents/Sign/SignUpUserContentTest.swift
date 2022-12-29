@@ -1,0 +1,26 @@
+@testable import App
+import XCTVapor
+
+final class SignUpUserContentTest: XCTestCase {
+    
+    let content = SignUpUserContent(
+        mailAddress: "test@example.com",
+        name: "Bob",
+        password: "password"
+    )
+    
+    func test_メールアドレスの取得() throws {
+        XCTAssertEqual(
+            try MailAddress("test@example.com"),
+            try content.getMailAddress()
+        )
+    }
+    
+    func test_ユーザー名の取得() throws {
+        XCTAssertEqual(
+            try Username("Bob"),
+            try content.getUsername()
+        )
+    }
+    
+}

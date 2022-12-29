@@ -10,8 +10,10 @@ func routes(_ app: Application) throws {
         try await req.signViewRender.render(isFailed: false, isAlreadyRegistered: false)
     }
     
+    let tutHubPageDataCache = TutorialPageDataCache()
+    
     try app.register(collection: SignController())
     try app.register(collection: RepositoryController())
-    try app.register(collection: TutController())
-    try app.register(collection: TutHubPageController())
+    try app.register(collection: TutController(cache: tutHubPageDataCache))
+    try app.register(collection: TutHubPageController(cache: tutHubPageDataCache))
 }
