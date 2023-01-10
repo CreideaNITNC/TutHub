@@ -27,18 +27,18 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CommitModel.Migration())
     app.migrations.add(SourceCodeModel.Migration())
     app.migrations.add(PictureModel.Migration())
-    app.migrations.add(SessionAuthUserModel.Migration())
+    app.migrations.add(BearerTokenModel.Migration())
     
     app.views.use(.leaf)
-    
-    app.middleware.use(app.sessions.middleware)
-    app.middleware.use(UserSessionAuthenticator())
     
     let timeout = HTTPClient.Configuration.Timeout(connect: .seconds(60), read: .seconds(60))
     app.http.client.configuration.timeout = timeout
     
     let corsConfiguration = CORSMiddleware.Configuration(
-        allowedOrigin: .custom(Environment.get("TUTPAGE_ORIGIN") ?? "http://localhost:5173"),
+        allowedOrigin: .any([
+            (Environment.get("TUTPAGE_ORIGIN") ?? "http://localhost:5173"),
+            (Environment.get("TUTHUBTOP_ORIGIN") ?? "http://localhost:3000"),
+        ]),
         allowedMethods: [.GET],
         allowedHeaders: [.accept, .authorization, .contentType, .origin, .xRequestedWith, .userAgent, .accessControlAllowOrigin]
     )

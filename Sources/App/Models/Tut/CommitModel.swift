@@ -20,7 +20,6 @@ final class CommitModel: Model {
     @Children(for: \.$commit)
     var codes: [SourceCodeModel]
     
-    
     @Children(for: \.$commit)
     var pictures: [PictureModel]
     
@@ -37,5 +36,14 @@ final class CommitModel: Model {
         self.step = step
         self.message = message
         self.$section.id = sectionID
+    }
+    
+    func commit() throws -> Commit {
+        try .init(
+            id: .init(value: requireID()),
+            message: .init(message),
+            codes: codes.sorted { $0.filename < $1.filename }.map { try $0.source() },
+            pictures: pictures.sorted { $0.number < $1.number }.map { try $0.picture() }
+        )
     }
 }

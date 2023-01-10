@@ -3,6 +3,8 @@ import Vapor
 
 struct TutController: RouteCollection {
     
+    var cache: TutorialPageDataCache
+    
     func boot(routes: RoutesBuilder) throws {
         let tut = routes.grouped("tut")
             .grouped(UserBasicAuthenticator())
@@ -11,15 +13,18 @@ struct TutController: RouteCollection {
     }
     
     func push(req: Request) async throws -> HTTPStatus {
-        let username = req.parameters.get("username")!
-        let repositoryName = req.parameters.get("repository")!
+        guard
+            let username = try req.parameters.get("username").map(Username.init),
+            let repositoryName = try req.parameters.get("repository").map(RepositoryName.init)
+        else { throw Abort(.badRequest) }
         let data = try req.content.decode(PushData.self)
         
-        guard let user = try await req.usernameRepository.user(username) else {
-            throw Abort(.unauthorized)
-        }
+        let user = try req.auth.require(User.self)
         
-        try await req.tutPushRepository.push(userID: user.id, repositoryName: repositoryName, data: data)
+        try await req.pushService.push(user, username, repositoryName, data)
+        
+        await cache.remove(username, repositoryName)
+        
         return .created
     }
 }

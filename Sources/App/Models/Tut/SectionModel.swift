@@ -39,4 +39,12 @@ final class SectionModel: Model {
         self.number = number
         self.$repository.id = repositoryID
     }
+    
+    func contentSection() throws -> ContentSection {
+        try .init(
+            id: .init(value: requireID()),
+            title: .init(name),
+            commits: commits.sorted { $0.step < $1.step }.map { try $0.commit() }
+        )
+    }
 }

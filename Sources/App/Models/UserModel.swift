@@ -14,7 +14,7 @@ final class UserModel: Model {
     @OptionalChild(for: \.$userModel)
     var signUserModel: SignUserModel?
     
-    @Children(for: \.$user)
+    @Children(for: \.$userModel)
     var repositories: [TutHubRepositoryModel]
     
     @Timestamp(key: "created_at", on: .create)
@@ -32,7 +32,7 @@ final class UserModel: Model {
     
     var user: User {
         guard let id else { fatalError("required user, but id == nil") }
-        return .init(id: id)
+        return .init(id: .init(value: id))
     }
     
 }

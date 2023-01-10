@@ -36,4 +36,12 @@ final class SourceCodeModel: Model {
         self.code = code
         self.$commit.id = commitID
     }
+    
+    func source() throws -> CommitSourceFile {
+        try .init(
+            id: .init(value: requireID()),
+            filename: .init(filename),
+            text: .init(code)
+        )
+    }
 }

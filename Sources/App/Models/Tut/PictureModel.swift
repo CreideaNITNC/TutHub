@@ -1,6 +1,7 @@
 import Vapor
 import Fluent
 
+
 final class PictureModel: Model {
     
     static let schema = "pictures"
@@ -11,8 +12,14 @@ final class PictureModel: Model {
     @Field(key: "filename")
     var filename: String
     
+    @Enum(key: "extension")
+    var `extension`: PictureFileExtension
+    
     @Field(key: "bin")
     var bin: Data
+    
+    @Field(key: "number")
+    var number: Int
     
     @Parent(key: "commit_id")
     var commit: CommitModel
@@ -28,13 +35,26 @@ final class PictureModel: Model {
     init(
         id: UUID? = nil,
         filename: String,
+        extension: PictureFileExtension,
         bin: Data,
+        number: Int,
         commitID: CommitModel.IDValue
     ) {
         self.id = id
         self.filename = filename
+        self.`extension` = `extension`
         self.bin = bin
+        self.number = number
         self.$commit.id = commitID
+    }
+    
+    func picture() throws -> CommitPicture {
+        try .init(
+            id: .init(value: requireID()),
+            binary: .init(bin),
+            filename: .init(filename),
+            extension: self.extension
+        )
     }
 }
 
