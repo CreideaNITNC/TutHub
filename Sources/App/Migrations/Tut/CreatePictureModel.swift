@@ -7,9 +7,10 @@ extension PictureModel {
 
 
             let extensionEnum = try await PictureFileExtension.allCases
-                .reduce(database.enum("picture_extension_type")) { builder, value in
+                .reduce(database.enum("picture_extensions_type")) { builder, value in
                     builder.case(value.rawValue)
-                }.create()
+                }
+                .create()
             
             let sample = PictureModel()
             
@@ -28,6 +29,7 @@ extension PictureModel {
         
         func revert(on database: FluentKit.Database) async throws {
             try await database.schema(PictureModel.schema).delete()
+            try await database.enum("picture_extensions_type").delete()
         }
     }
 }

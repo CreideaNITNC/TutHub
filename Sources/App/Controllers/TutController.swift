@@ -19,7 +19,7 @@ struct TutController: RouteCollection {
         else { throw Abort(.badRequest) }
         let data = try req.content.decode(PushData.self)
         
-        let user = try req.requireUser()
+        let user = try req.auth.require(User.self)
         
         try await req.pushService.push(user, username, repositoryName, data)
         

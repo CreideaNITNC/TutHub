@@ -2,17 +2,21 @@ import Vapor
 
 struct SignUpUserContent: Content {
     
-    var mailAddress: String
+    var mail: String
     
     var name: String
     
     var password: String
     
-    func getMailAddress() throws -> MailAddress {
-        try .init(mailAddress)
+    var getMailAddress: MailAddress {
+        get throws {
+            try .init(mail)
+        }
     }
     
-    func getUsername() throws -> Username {
-        try .init(name)
+    var getUsername: Username {
+        get throws {
+            try .init(name)
+        }
     }
 }

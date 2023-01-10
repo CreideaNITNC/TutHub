@@ -6,6 +6,8 @@ struct RepositoriesContent: Content {
     
     struct Repository: Content {
         var name: String
-        var link: String
+        var title: String
+        var remoteURL: String
+        var webURL: String
     }
 }

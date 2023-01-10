@@ -1,13 +1,14 @@
 import Fluent
 import Vapor
+import Leaf
 
 func routes(_ app: Application) throws {
     app.post("tanaka", "vapor") { req in
         HTTPStatus.created
     }
     
-    app.get { req async throws -> View in
-        try await req.signViewRender.render(isFailed: false, isAlreadyRegistered: false)
+    app.get("test") { req async throws -> View in
+        try await req.leaf.render("test")
     }
     
     let tutHubPageDataCache = TutorialPageDataCache()

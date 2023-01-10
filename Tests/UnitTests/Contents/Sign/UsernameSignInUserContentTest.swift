@@ -11,7 +11,7 @@ final class UsernameSignInUserContentTest: XCTestCase {
     func test_ユーザー名の取得() throws {
         XCTAssertEqual(
             try Username("Bob"),
-            try content.getUsername()
+            try content.getUsername
         )
     }
 }

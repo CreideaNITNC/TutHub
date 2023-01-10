@@ -12,7 +12,7 @@ struct DatabaseSignUserRepository: SignUserRepository {
             .first()
             .map { model in
                 try .init(
-                    id: .init(value: model.requireID()),
+                    id: .init(value: model.$userModel.id),
                     username: name,
                     mailAddress: .init(model.mailAddress),
                     passwordHash: .init(value: model.passwordHash)

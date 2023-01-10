@@ -4,7 +4,7 @@ import XCTVapor
 final class SignUpUserContentTest: XCTestCase {
     
     let content = SignUpUserContent(
-        mailAddress: "test@example.com",
+        mail: "test@example.com",
         name: "Bob",
         password: "password"
     )
@@ -12,14 +12,14 @@ final class SignUpUserContentTest: XCTestCase {
     func test_メールアドレスの取得() throws {
         XCTAssertEqual(
             try MailAddress("test@example.com"),
-            try content.getMailAddress()
+            try content.getMailAddress
         )
     }
     
     func test_ユーザー名の取得() throws {
         XCTAssertEqual(
             try Username("Bob"),
-            try content.getUsername()
+            try content.getUsername
         )
     }
     

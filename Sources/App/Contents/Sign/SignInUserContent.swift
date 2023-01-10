@@ -2,11 +2,13 @@ import Vapor
 
 struct MailAddressSignInUserContent: Content {
     
-    var mailAddress: String
+    var mail: String
     
     var password: String
     
-    func getMailAddress() throws -> MailAddress {
-        try .init(mailAddress)
+    var getMailAddress: MailAddress {
+        get throws {
+            try .init(mail)
+        }
     }
 }

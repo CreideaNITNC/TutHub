@@ -6,7 +6,9 @@ struct UsernameSignInUserContent: Content {
     
     var password: String
     
-    func getUsername() throws -> Username {
-        try .init(name)
+    var getUsername: Username {
+        get throws {
+            try .init(name)
+        }
     }
 }
