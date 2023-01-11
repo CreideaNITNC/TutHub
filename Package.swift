@@ -36,7 +36,6 @@ let package = Package(
         ]),
         .testTarget(name: "UnitTests", dependencies: [
             .target(name: "App"),
-            .product(name: "XCTVapor", package: "vapor"),
         ], path: "Tests/UnitTests"),
     ]
 )
