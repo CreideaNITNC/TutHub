@@ -1,4 +1,4 @@
-import Vapor
+import Foundation
 
 struct RepositoryTitle: Hashable, Equatable {
     var value: String
@@ -18,14 +18,6 @@ struct RepositoryTitle: Hashable, Equatable {
     
 }
 
-fileprivate struct RepositoryTitleError: AbortError, DebuggableError {
-    
+fileprivate struct RepositoryTitleError: Error {
     var candidate: String
-    
-    let status: HTTPStatus = .badRequest
-        
-    var reason: String {
-        "リポジトリのタイトル: \(candidate) は不正値です"
-    }
-    
 }

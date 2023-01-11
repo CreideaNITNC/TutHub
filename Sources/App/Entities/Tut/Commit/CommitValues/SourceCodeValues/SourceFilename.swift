@@ -1,5 +1,4 @@
-import Vapor
-
+import Foundation
 
 struct SourceFilename: Hashable, Equatable {
     
@@ -21,14 +20,6 @@ struct SourceFilename: Hashable, Equatable {
     
 }
 
-fileprivate struct SourceFilenameError: AbortError, DebuggableError {
-    
+fileprivate struct SourceFilenameError: Error {
     var candidate: String
-    
-    let status: HTTPStatus = .badRequest
-        
-    var reason: String {
-        "ソースファイル名: \(candidate) は不正値です"
-    }
-    
 }

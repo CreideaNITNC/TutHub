@@ -1,4 +1,4 @@
-import Vapor
+import Foundation
 
 struct SectionTitle: Hashable, Equatable {
     
@@ -19,14 +19,6 @@ struct SectionTitle: Hashable, Equatable {
     private static let MAX_TITLE_COUNT = 20
 }
 
-fileprivate struct SectionTitleError: AbortError, DebuggableError {
-    
+fileprivate struct SectionTitleError: Error {
     var candidate: String
-    
-    let status: HTTPStatus = .badRequest
-        
-    var reason: String {
-        "セクションのタイトル: \(candidate) は不正値です"
-    }
-    
 }

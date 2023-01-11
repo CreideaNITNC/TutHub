@@ -1,5 +1,4 @@
-import Vapor
-
+import Foundation
 
 struct PictureData: Hashable, Equatable {
     
@@ -21,9 +20,4 @@ struct PictureData: Hashable, Equatable {
     
 }
 
-fileprivate struct PictureDataError: AbortError, DebuggableError {
-    
-    var status: HTTPStatus = .badRequest
-    
-    var reason = "画像サイズが不正値です"
-}
+fileprivate struct PictureDataError: Error {}

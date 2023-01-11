@@ -1,5 +1,3 @@
-import Vapor
-
 struct SignUser: Identifiable, Hashable, Equatable {
     
     var id: UserID

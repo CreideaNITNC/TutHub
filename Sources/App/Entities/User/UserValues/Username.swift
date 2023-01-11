@@ -1,4 +1,4 @@
-import Vapor
+import Foundation
 
 struct Username: Hashable, Equatable {
     var value: String
@@ -19,14 +19,6 @@ struct Username: Hashable, Equatable {
     }
 }
 
-fileprivate struct UsernameError: AbortError, DebuggableError {
-    
+fileprivate struct UsernameError: Error {
     var candidate: String
-    
-    let status: HTTPStatus = .badRequest
-    
-    var reason: String {
-        "ユーザ名: \(candidate) は不正値です"
-    }
-    
 }

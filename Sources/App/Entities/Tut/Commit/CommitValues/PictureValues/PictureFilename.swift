@@ -1,5 +1,4 @@
-import Vapor
-
+import Foundation
 
 struct PictureFilename: Hashable, Equatable {
     
@@ -28,14 +27,6 @@ struct PictureFilename: Hashable, Equatable {
     
 }
 
-fileprivate struct PictureFilenameError: AbortError, DebuggableError {
-    
+fileprivate struct PictureFilenameError: Error {
     var candidate: String
-    
-    let status: HTTPStatus = .badRequest
-        
-    var reason: String {
-        "画像ファイル名: \(candidate) は不正値です"
-    }
-    
 }

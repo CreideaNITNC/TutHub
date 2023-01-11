@@ -1,4 +1,4 @@
-import Vapor
+import Foundation
 
 struct SectionPage: Hashable, Equatable {
     var value: Int
@@ -17,14 +17,6 @@ struct SectionPage: Hashable, Equatable {
     private static let MIN_PAGE_NUMBER = 1
 }
 
-fileprivate struct SectionPageError: AbortError, DebuggableError {
-    
+fileprivate struct SectionPageError: Error {
     var candidate: Int
-    
-    let status: HTTPStatus = .badRequest
-        
-    var reason: String {
-        "セクションのページ: \(candidate) は不正値です"
-    }
-    
 }

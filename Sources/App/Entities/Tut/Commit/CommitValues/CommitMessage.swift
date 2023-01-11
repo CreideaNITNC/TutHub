@@ -1,4 +1,4 @@
-import Vapor
+import Foundation
 
 struct CommitMessage: Hashable, Equatable {
     
@@ -20,14 +20,6 @@ struct CommitMessage: Hashable, Equatable {
     
 }
 
-fileprivate struct CommitMessageError: AbortError, DebuggableError {
-    
+fileprivate struct CommitMessageError: Error {
     var candidate: String
-    
-    let status: HTTPStatus = .badRequest
-        
-    var reason: String {
-        "コミットメッセージ: \(candidate) は不正値です"
-    }
-    
 }

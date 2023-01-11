@@ -1,5 +1,4 @@
-import Vapor
-
+import Foundation
 
 struct MailAddress: Hashable, Equatable {
     
@@ -20,14 +19,6 @@ struct MailAddress: Hashable, Equatable {
     }
 }
 
-fileprivate struct MailAddressError: AbortError, DebuggableError {
-    
+fileprivate struct MailAddressError: Error {
     var candidate: String
-    
-    let status: HTTPStatus = .badRequest
-        
-    var reason: String {
-        "メールアドレス: \(candidate) は不正値です"
-    }
-    
 }

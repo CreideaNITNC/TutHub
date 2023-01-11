@@ -1,4 +1,4 @@
-import Vapor
+import Foundation
 
 struct UserID: Hashable, Equatable {
     var value: UUID
