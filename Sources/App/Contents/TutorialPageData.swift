@@ -1,4 +1,5 @@
 import Vapor
+import Entity
 
 struct TutorialPageData: Content {
     var username: String
@@ -14,7 +15,7 @@ struct TutorialPageData: Content {
         var codes: [Code]
         var pictures: [Picture]
         
-        init(_ step: Int, _ commit: App.Commit) {
+        init(_ step: Int, _ commit: Entity.Commit) {
             self.step = step
             self.message = commit.message.value
             self.codes = commit.codes.map { .init($0) }

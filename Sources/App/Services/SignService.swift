@@ -1,4 +1,5 @@
 import Vapor
+import Entity
 
 protocol SignService {
     func signIn(_ user: MailAddressSignInUserContent) async throws -> User?

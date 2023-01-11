@@ -1,4 +1,5 @@
 import Vapor
+import Entity
 
 struct PushData: Content {
     
@@ -31,7 +32,7 @@ struct PushData: Content {
         var pictures: [Picture]
         var codes: [SourceCode]
         
-        func commit() throws -> App.Commit {
+        func commit() throws -> Entity.Commit {
             try .init(
                 id: .init(value: UUID()),
                 message: .init(message),

@@ -1,4 +1,5 @@
 @testable import App
+import Entity
 import XCTest
 
 final class TutrialPageDataTest: XCTestCase {

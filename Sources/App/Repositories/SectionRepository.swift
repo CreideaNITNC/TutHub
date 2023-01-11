@@ -1,4 +1,5 @@
 import Vapor
+import Entity
 
 protocol SectionRepoistory {
     func find(_ user: User, _ repositoryName: RepositoryName, _ page: SectionPage) async throws -> Section?

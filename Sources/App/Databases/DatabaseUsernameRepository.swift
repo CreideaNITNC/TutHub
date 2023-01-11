@@ -1,5 +1,6 @@
 import Vapor
 import Fluent
+import Entity
 
 struct DatabaseUsernameRepository: UsernameRepository {
     

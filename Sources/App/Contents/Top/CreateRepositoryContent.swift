@@ -1,4 +1,5 @@
 import Vapor
+import Entity
 
 struct CreateRepositoryContent: Content {
     

@@ -20,7 +20,8 @@ let package = Package(
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
                 .product(name: "Leaf", package: "leaf"),
-                .product(name: "Vapor", package: "vapor")
+                .product(name: "Vapor", package: "vapor"),
+                .target(name: "Entity")
             ],
             swiftSettings: [
                 // Enable better optimizations when building in Release configuration. Despite the use of
@@ -29,13 +30,13 @@ let package = Package(
                 .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
             ]
         ),
+        .target(name: "Entity"),
         .executableTarget(name: "Run", dependencies: [.target(name: "App")]),
         .testTarget(name: "AppTests", dependencies: [
             .target(name: "App"),
             .product(name: "XCTVapor", package: "vapor"),
         ]),
-        .testTarget(name: "UnitTests", dependencies: [
-            .target(name: "App"),
-        ], path: "Tests/UnitTests"),
+        .testTarget(name: "UnitTests", dependencies: [.target(name: "App")], path: "Tests/UnitTests"),
+        .testTarget(name: "EntityTests", dependencies: [.target(name: "Entity")])
     ]
 )

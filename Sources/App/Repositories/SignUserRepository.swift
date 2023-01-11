@@ -1,4 +1,5 @@
 import Vapor
+import Entity
 
 protocol SignUserRepository {
     
