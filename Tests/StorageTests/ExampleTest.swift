@@ -1,4 +1,4 @@
-@testable import Presentation
+@testable import Storage
 import XCTest
 
 final class ExampleTest: XCTestCase {

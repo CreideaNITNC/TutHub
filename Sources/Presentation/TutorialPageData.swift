@@ -2,18 +2,18 @@ import Vapor
 import Entity
 
 public struct TutorialPageData: Content {
-    var username: String
-    var repositoryName: String
-    var pageNumber: Int
-    var pageTitle: String
-    var commits: [Commit]
-    var next: OverView?
+    public var username: String
+    public var repositoryName: String
+    public var pageNumber: Int
+    public var pageTitle: String
+    public var commits: [Commit]
+    public var next: OverView?
     
     public struct Commit: Content {
-        var step: Int
-        var message: String
-        var codes: [Code]
-        var pictures: [Picture]
+        public var step: Int
+        public var message: String
+        public var codes: [Code]
+        public var pictures: [Picture]
         
         public init(_ step: Int, _ commit: Entity.Commit) {
             self.step = step
@@ -24,8 +24,8 @@ public struct TutorialPageData: Content {
     }
     
     public struct Code: Content {
-        var filename: String
-        var code: String
+        public var filename: String
+        public var code: String
         
         public init(_ source: CommitSourceFile) {
             self.filename = source.filename.value
@@ -34,9 +34,9 @@ public struct TutorialPageData: Content {
     }
     
     public struct Picture: Content {
-        var filename: String
-        var `extension`: PictureFileExtension
-        var encodedBinaryData: Data
+        public var filename: String
+        public var `extension`: PictureFileExtension
+        public var encodedBinaryData: Data
         
         public init(_ picture: CommitPicture) {
             self.filename = picture.filename.value
@@ -46,8 +46,8 @@ public struct TutorialPageData: Content {
     }
     
     public struct OverView: Content {
-        var message: String
-        var ncodedBinaryPictureData: String?
+        public var message: String
+        public var ncodedBinaryPictureData: String?
         
         public init(message: String, ncodedBinaryPictureData: String? = nil) {
             self.message = message

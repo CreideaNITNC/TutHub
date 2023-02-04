@@ -56,8 +56,6 @@ public func configure(_ app: Application) throws {
     
     app.routes.defaultMaxBodySize = "500mb"
     
-    app.logger.logLevel = .debug
-    
     // register routes
     try routes(app)
 }
