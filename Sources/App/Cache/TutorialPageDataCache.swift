@@ -1,5 +1,6 @@
 import Vapor
 import Entity
+import Presentation
 
 /** LRU のキャッシュ */
 actor TutorialPageDataCache {

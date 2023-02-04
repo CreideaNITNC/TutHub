@@ -1,5 +1,6 @@
 import Vapor
 import Entity
+import Presentation
 
 protocol PushService {
     func push(_ user: User, _ username: Username, _ repositoryName: RepositoryName, _ data: PushData) async throws

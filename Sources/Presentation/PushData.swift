@@ -1,11 +1,11 @@
 import Vapor
 import Entity
 
-struct PushData: Content {
+public struct PushData: Content {
     
     var sections: [Self.Section]
     
-    func contentRepository(_ id: RepositoryID) throws -> TutHubContentRepository {
+    public func contentRepository(_ id: RepositoryID) throws -> TutHubContentRepository {
         try .init(
             id: id,
             sections: sections.map { try $0.contentSection() }

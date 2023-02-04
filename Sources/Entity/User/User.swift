@@ -1,4 +1,4 @@
-public struct User: Equatable, Hashable, Identifiable {
+public struct User: Hashable, Equatable, Identifiable {
     
     public var id: UserID
     

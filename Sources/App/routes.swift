@@ -1,6 +1,7 @@
 import Fluent
 import Vapor
 import Leaf
+import Entity
 
 func routes(_ app: Application) throws {
     app.post("tanaka", "vapor") { req in

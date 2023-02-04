@@ -16,6 +16,14 @@ public func configure(_ app: Application) throws {
         database: Environment.get("DATABASE_NAME") ?? "vapor_database"
     ), as: .psql)
     
+    app.databases.use(.postgres(
+        hostname: Environment.get("DATABASE_HOST") ?? "db",
+        port: Environment.get("DATABASE_PORT").flatMap(Int.init(_:)) ?? PostgresConfiguration.ianaPortNumber,
+        username: Environment.get("DATABASE_USERNAME") ?? "vapor_username",
+        password: Environment.get("DATABASE_PASSWORD") ?? "vapor_password",
+        database: Environment.get("DATABASE_NAME") ?? "vapor_database"
+    ), as: .psql)
+    
     app.migrations.add(UserModel.Migration())
     app.seeders.add(UserModel.Seeder())
     
@@ -39,7 +47,7 @@ public func configure(_ app: Application) throws {
             (Environment.get("TUTPAGE_ORIGIN") ?? "http://localhost:5173"),
             (Environment.get("TUTHUBTOP_ORIGIN") ?? "http://localhost:3000"),
         ]),
-        allowedMethods: [.GET],
+        allowedMethods: [.GET, .POST, .PATCH, .PUT, .DELETE],
         allowedHeaders: [.accept, .authorization, .contentType, .origin, .xRequestedWith, .userAgent, .accessControlAllowOrigin]
     )
     let cors = CORSMiddleware(configuration: corsConfiguration)
@@ -47,6 +55,8 @@ public func configure(_ app: Application) throws {
     app.middleware.use(cors, at: .beginning)
     
     app.routes.defaultMaxBodySize = "500mb"
+    
+    app.logger.logLevel = .debug
     
     // register routes
     try routes(app)
