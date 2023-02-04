@@ -1,5 +1,6 @@
 import Vapor
 import Fluent
+import Entity
 
 struct DatabaseTutPushRepository: TutPushRepository {
     
@@ -7,6 +8,8 @@ struct DatabaseTutPushRepository: TutPushRepository {
     
     
     func push(_ repository: TutHubContentRepository) async throws {
+        print("✨")
+        print(repository)
         try await db.transaction { transaction in
             try await deleteSection(repository.id, on: transaction)
             
@@ -35,9 +38,9 @@ struct DatabaseTutPushRepository: TutPushRepository {
     }
     
     private func createCommits(_ repository: TutHubContentRepository, _ sectionIDs: [SectionID], on transaction: Database) async throws -> [[CommitID]] {
-        let commits: [[CommitModel]] = repository.sections.map { section in
-            section.commits.enumerated().map { (index, commit) in
-                    .init(step: index + 1, message: commit.message.value, sectionID: section.id.value)
+        let commits: [[CommitModel]] = repository.sections.enumerated().map { (sectionIndex, section) in
+            section.commits.enumerated().map { (commitIndex, commit) in
+                    .init(step: commitIndex + 1, message: commit.message.value, sectionID: sectionIDs[sectionIndex].value)
             }
         }
         try await commits.flatMap({$0}).create(on: transaction)

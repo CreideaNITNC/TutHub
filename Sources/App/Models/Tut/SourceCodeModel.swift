@@ -1,5 +1,6 @@
 import Vapor
 import Fluent
+import Entity
 
 final class SourceCodeModel: Model {
     

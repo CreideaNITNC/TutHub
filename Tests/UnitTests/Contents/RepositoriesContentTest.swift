@@ -1,4 +1,4 @@
 @testable import App
-import XCTVapor
+import XCTest
 
 final class RepositoriesContentTest: XCTestCase {}

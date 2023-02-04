@@ -1,4 +1,6 @@
 import Vapor
+import Entity
+import Presentation
 
 struct TutHubPageController: RouteCollection {
     

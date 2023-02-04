@@ -1,4 +1,5 @@
 import Vapor
+import Entity
 
 protocol TutHubPageService {
     func read(_ username: Username, _ repositoryName: RepositoryName, _ page: SectionPage) async throws -> ContentSection

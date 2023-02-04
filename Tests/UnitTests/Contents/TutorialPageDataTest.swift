@@ -1,5 +1,7 @@
 @testable import App
-import XCTVapor
+import Entity
+import Presentation
+import XCTest
 
 final class TutrialPageDataTest: XCTestCase {
     

@@ -1,5 +1,6 @@
 @testable import App
-import XCTVapor
+import Entity
+import XCTest
 
 final class SignInUserContentTest: XCTestCase {
     

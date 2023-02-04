@@ -1,11 +1,12 @@
 import Vapor
 import Fluent
+import Entity
 
 extension User: Authenticatable {}
 
 struct UserBasicAuthenticator: AsyncBasicAuthenticator {
     
-    typealias User = App.User
+    typealias User = Entity.User
     
     func authenticate(
         basic: BasicAuthorization,

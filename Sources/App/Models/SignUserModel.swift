@@ -2,7 +2,6 @@ import Vapor
 import Fluent
 
 final class SignUserModel: Model {
-    
     static let schema = "sign_users"
     
     @ID(key: "id")
