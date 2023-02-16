@@ -4,6 +4,7 @@ import Entity
 public struct TutorialPageData: Content {
     public var username: String
     public var repositoryName: String
+    public var repositoryTitle: String
     public var pageNumber: Int
     public var pageTitle: String
     public var commits: [Commit]
@@ -55,9 +56,16 @@ public struct TutorialPageData: Content {
         }
     }
     
-    public init(_ username: Username, _ repositoryName: RepositoryName, _ page: SectionPage, _ content: ContentSection) {
+    public init(
+        _ username: Username,
+        _ repositoryName: RepositoryName,
+        _ repositoryTitle: RepositoryTitle,
+        _ page: SectionPage,
+        _ content: ContentSection
+    ) {
         self.username = username.value
         self.repositoryName = repositoryName.value
+        self.repositoryTitle = repositoryTitle.value
         self.pageNumber = page.value
         self.pageTitle = content.title.value
         self.commits = content.commits.enumerated().map { .init($0.offset, $0.element) }
