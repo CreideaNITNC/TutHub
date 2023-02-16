@@ -15,7 +15,7 @@ extension SourceCodeModel {
                 .create()
         }
         
-        func revert(on database: FluentKit.Database) async throws {
+        func revert(on database: Database) async throws {
             try await database.schema(SourceCodeModel.schema).delete()
         }
     }

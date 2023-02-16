@@ -1,6 +1,7 @@
 import Vapor
 import Entity
 import Presentation
+import Repository
 
 struct TutHubPageController: RouteCollection {
     
@@ -15,7 +16,9 @@ struct TutHubPageController: RouteCollection {
         guard
             let username = try req.parameters.get("username").map(Username.init),
             let repositoryName = try req.parameters.get("repository").map(RepositoryName.init),
-            let page = try req.parameters.get("page", as: Int.self).map(SectionPage.init)
+            let page = try req.parameters.get("page", as: Int.self).map(SectionPage.init),
+            let user = try await req.usernameRepository.user(username),
+            let repository = try await req.tutHubSettingRepositoryRepository.find(user.id, repositoryName)
         else { throw Abort(.badRequest) }
         
         if let data = await cache.find(username, repositoryName) {
@@ -23,7 +26,7 @@ struct TutHubPageController: RouteCollection {
         }
         
         let content = try await req.tutHubPageService.read(username, repositoryName, page)
-        let data = TutorialPageData(username, repositoryName, page, content)
+        let data = TutorialPageData(username, repositoryName, repository.title, page, content)
         
         await cache.cache(username, repositoryName, data)
         
